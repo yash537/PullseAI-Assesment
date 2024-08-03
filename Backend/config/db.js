@@ -1,15 +1,21 @@
-// ESM
 import fastifyPlugin from "fastify-plugin";
-import fastifyMongo from "@fastify/mongodb";
+import mongoose from "mongoose";
 
-/**
- * @param {FastifyInstance} fastify
- * @param {Object} options
- */
 async function dbConnector(fastify, options) {
-  fastify.register(fastifyMongo, {
-    url: "mongodb+srv://admin:admin@cohourt.1ptheva.mongodb.net/pullseAI-Assesment",
-  });
+  try {
+    await mongoose.connect(
+      "mongodb+srv://admin:admin@cohourt.1ptheva.mongodb.net/pullseAI-Assesment",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
+    fastify.decorate("mongoose", mongoose);
+    console.log("db connected successfully");
+  } catch (error) {
+    fastify.log.error(error);
+    process.exit(1);
+  }
 }
 
 export default fastifyPlugin(dbConnector);
