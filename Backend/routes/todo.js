@@ -1,5 +1,6 @@
 import Todo from "../models/todo.js";
 import { createTodoSchema, updateTodoSchema } from "../schemas/todoSchema.js";
+import { z } from "zod";
 
 async function routes(fastify, options) {
   const collection = fastify.mongoose.model("Todo");
@@ -22,18 +23,22 @@ async function routes(fastify, options) {
   fastify.post("/tasks", async (request, reply) => {
     try {
       // Validate input
-      if (request.body.due_date) {
-        request.body.due_date = new Date(request.body.due_date);
-      }
-      if (request.body.created_at) {
-        request.body.created_at = new Date(request.body.created_at);
-      }
       const validated = createTodoSchema.parse(request.body);
       const todo = new collection(validated);
       const result = await todo.save();
       reply.code(201).send(result);
     } catch (err) {
-      reply.code(400).send({ message: err.message });
+      if (err instanceof z.ZodError) {
+        reply.code(400).send({
+          message: "Validation error",
+          errors: err.errors.map((e) => ({
+            path: e.path.join("."), // Show full path to the invalid field
+            message: e.message,
+          })),
+        });
+      } else {
+        reply.code(400).send({ message: err.message });
+      }
     }
   });
 
@@ -42,12 +47,6 @@ async function routes(fastify, options) {
     const { id } = request.params;
     try {
       // Validate input
-      if (request.body.due_date) {
-        request.body.due_date = new Date(request.body.due_date);
-      }
-      if (request.body.created_at) {
-        request.body.created_at = new Date(request.body.created_at);
-      }
       const validated = updateTodoSchema.parse(request.body);
       const result = await collection.updateOne(
         { _id: new fastify.mongoose.Types.ObjectId(id) },
@@ -59,7 +58,17 @@ async function routes(fastify, options) {
         reply.code(200).send({ message: "Document updated successfully" });
       }
     } catch (err) {
-      reply.code(400).send({ message: err.message });
+      if (err instanceof z.ZodError) {
+        reply.code(400).send({
+          message: "Validation error",
+          errors: err.errors.map((e) => ({
+            path: e.path.join("."), // Show full path to the invalid field
+            message: e.message,
+          })),
+        });
+      } else {
+        reply.code(400).send({ message: err.message });
+      }
     }
   });
 
