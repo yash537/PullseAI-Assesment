@@ -81,22 +81,18 @@ async function routes(fastify, options) {
   });
 
   // Get all todos
-  fastify.get(
-    "/tasks",
-    { preHandler: usermiddleware },
-    async (request, reply) => {
-      try {
-        const result = await collection.find().exec();
-        if (result.length === 0) {
-          reply.code(404).send({ message: "No documents found" });
-        } else {
-          reply.code(200).send(result);
-        }
-      } catch (err) {
-        reply.code(500).send({ message: err.message });
+  fastify.get("/tasks", async (request, reply) => {
+    try {
+      const result = await collection.find().exec();
+      if (result.length === 0) {
+        reply.code(404).send({ message: "No documents found" });
+      } else {
+        reply.code(200).send(result);
       }
+    } catch (err) {
+      reply.code(500).send({ message: err.message });
     }
-  );
+  });
 
   // Create a new todo
   fastify.post("/tasks", async (request, reply) => {
