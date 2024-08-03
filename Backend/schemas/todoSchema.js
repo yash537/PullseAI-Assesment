@@ -21,6 +21,17 @@ export const createTodoSchema = z.object({
     }),
 });
 
+export const userSchema = z.object({
+  emailid: z
+    .string()
+    .email({ message: "Invalid email address" })
+    .min(1, { message: "Email Id field is required" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 6 characters long" })
+    .min(1, { message: "Password field is required" }),
+});
+
 export const updateTodoSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),

@@ -8,4 +8,5 @@ const todoSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now },
 });
 
-export default mongoose.model("Todo", todoSchema);
+const Todo = mongoose.model("Todo", todoSchema);
+export default Todo;
