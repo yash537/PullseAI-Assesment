@@ -1,7 +1,12 @@
-import "./App.css";
+import React from "react";
+import TodoList from "./container/TodoList";
 
-function App() {
-  return <div className="App">hellow</div>;
-}
+const App = () => {
+  return (
+    <div>
+      <TodoList />
+    </div>
+  );
+};
 
 export default App;
