@@ -1,9 +1,14 @@
 import Fastify from "fastify";
 import Todo from "./routes/todo.js";
 import dbConnector from "./config/db.js";
+import cors from "@fastify/cors";
 
 const fastify = Fastify({
   logger: true,
+});
+
+fastify.register(cors, {
+  origin: "*",
 });
 
 fastify.register(dbConnector).after((err) => {

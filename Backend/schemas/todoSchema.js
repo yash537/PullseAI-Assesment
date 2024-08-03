@@ -26,13 +26,13 @@ export const updateTodoSchema = z.object({
   description: z.string().optional(),
   status: z.string().optional(),
   due_date: z
-    .string()
+    .date()
     .optional()
     .transform(parseDate, {
       errorMap: () => ({ message: "Invalid date format for due_date" }),
     }),
   created_at: z
-    .string()
+    .date()
     .optional()
     .transform(parseDate, {
       errorMap: () => ({ message: "Invalid date format for created_at" }),

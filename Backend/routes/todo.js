@@ -45,24 +45,44 @@ async function routes(fastify, options) {
   // Update an existing todo
   fastify.put("/tasks/:id", async (request, reply) => {
     const { id } = request.params;
+
+    // Validate and convert the id to MongoDB ObjectId
+    // let objectId;
+    // try {
+    //   objectId = new ObjectId(id);
+    // } catch (error) {
+    //   return reply.code(400).send({ message: "Invalid ID format" });
+    // }
+
     try {
+      // Convert date strings to Date objects
+      if (request.body.due_date) {
+        request.body.due_date = new Date(request.body.due_date);
+      }
+      if (request.body.created_at) {
+        request.body.created_at = new Date(request.body.created_at);
+      }
+
       // Validate input
       const validated = updateTodoSchema.parse(request.body);
+
       const result = await collection.updateOne(
-        { _id: new fastify.mongoose.Types.ObjectId(id) },
+        { _id: id },
         { $set: validated }
       );
+
       if (result.matchedCount === 0) {
         reply.code(404).send({ message: "Document not found" });
       } else {
         reply.code(200).send({ message: "Document updated successfully" });
       }
     } catch (err) {
+      // Check if the error is from Zod validation
       if (err instanceof z.ZodError) {
         reply.code(400).send({
           message: "Validation error",
           errors: err.errors.map((e) => ({
-            path: e.path.join("."), // Show full path to the invalid field
+            path: e.path[0],
             message: e.message,
           })),
         });
