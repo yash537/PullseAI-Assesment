@@ -11,12 +11,21 @@ import {
   DELETE_TODO_REQUEST,
   DELETE_TODO_SUCCESS,
   DELETE_TODO_FAIL,
+  SIGNUP_REQUEST,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAIL,
+  SIGNIN_REQUEST,
+  SIGNIN_SUCCESS,
+  SIGNIN_FAIL,
 } from "./actions";
 
 const initialState = {
   items: [],
   loading: false,
   error: null,
+  user: null,
+  authLoading: false,
+  authError: null,
 };
 
 const todoReducer = (state = initialState, action) => {
@@ -62,6 +71,20 @@ const todoReducer = (state = initialState, action) => {
       };
     case DELETE_TODO_FAIL:
       return { ...state, loading: false, error: action.payload };
+
+    case SIGNUP_REQUEST:
+      return { ...state, authLoading: true, authError: null };
+    case SIGNUP_SUCCESS:
+      return { ...state, authLoading: false, user: action.payload };
+    case SIGNUP_FAIL:
+      return { ...state, authLoading: false, authError: action.payload };
+
+    case SIGNIN_REQUEST:
+      return { ...state, authLoading: true, authError: null };
+    case SIGNIN_SUCCESS:
+      return { ...state, authLoading: false, user: action.payload };
+    case SIGNIN_FAIL:
+      return { ...state, authLoading: false, authError: action.payload };
 
     default:
       return state;

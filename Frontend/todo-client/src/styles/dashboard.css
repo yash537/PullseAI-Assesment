@@ -1,0 +1,160 @@
+/* src/styles/dashboard.css */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  background-color: #4caf50;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  position: relative;
+  background: linear-gradient(135deg, #f9d423, #ff4e50);
+}
+
+.todo-list {
+  width: 30%;
+  background-color: #ffffff;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+.todo-list h2 {
+  margin-top: 0;
+}
+
+.todo-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.todo-list li {
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.todo-list li:hover {
+  background-color: #e0e0e0;
+}
+
+.add-task-button {
+  display: block;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-task-button:hover {
+  background-color: #45a049;
+}
+
+.todo-details {
+  width: 70%;
+  padding: 20px;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.11); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Optional: adds a blur effect */
+}
+
+.details-content {
+  position: relative;
+  z-index: 1;
+}
+
+.todo-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+}
+
+.todo-card-title {
+  margin-top: 0;
+  font-size: 1.5em;
+}
+
+.todo-card-description {
+  margin: 10px 0;
+  font-size: 1.1em;
+}
+
+.todo-card-status,
+.todo-card-due-date,
+.todo-card-created-at {
+  margin: 5px 0;
+}
+
+.todo-actions {
+  margin-top: 20px;
+}
+
+.todo-actions button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.todo-actions button:first-child {
+  background-color: #4caf50;
+  color: white;
+}
+
+.todo-actions button:first-child:hover {
+  background-color: #45a049;
+}
+
+.todo-actions button:last-child {
+  background-color: #f44336;
+  color: white;
+}
+
+.todo-actions button:last-child:hover {
+  background-color: #e53935;
+}
+
+.background-svg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  background-color: #f0f0f0;
+}
+
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.navigation a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.navigation a:hover {
+  text-decoration: underline;
+}
+
+.todo-list li.done {
+  text-decoration: line-through;
+  color: #6c757d;
+}
