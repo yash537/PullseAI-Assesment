@@ -1,7 +1,7 @@
 /* src/styles/signup.css */
 .signup-page {
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #f9d423, #ff4e50);
+  background: #ffffff;
   min-height: 100vh;
   display: flex;
   align-items: center;

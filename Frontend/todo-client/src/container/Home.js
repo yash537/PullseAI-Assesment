@@ -12,7 +12,7 @@ const LandingPage = () => {
         <div className="logo">TodoApp</div>
         <nav className="navigation">
           <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
+          <Link to="/">About</Link>
           <Link to="/signup">Sign Up</Link>
         </nav>
       </header>

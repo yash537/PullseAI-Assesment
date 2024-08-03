@@ -41,10 +41,15 @@ const Dashboard = () => {
     setShowForm(true);
   };
 
-  const handleSave = () => {
-    dispatch(fetchTodos());
-    setSelectedTodo(null);
-    setShowForm(false);
+  const handleSave = (savedTodo) => {
+    dispatch(fetchTodos())
+      .then(() => {
+        setSelectedTodo(savedTodo); // Set the saved todo as selected
+        setShowForm(false);
+      })
+      .catch((error) => {
+        toast.error("Failed to fetch todos after save."); // Handle error if needed
+      });
   };
 
   const handleCancel = () => {
@@ -58,7 +63,7 @@ const Dashboard = () => {
         <div className="logo">TodoApp</div>
         <nav className="navigation">
           <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
+          <Link to="/">About</Link>
           <Link to="/signup">Sign Up</Link>
         </nav>
       </header>

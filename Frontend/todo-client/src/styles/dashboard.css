@@ -16,7 +16,7 @@
   display: flex;
   flex: 1;
   position: relative;
-  background: linear-gradient(135deg, #f9d423, #ff4e50);
+  background: #ffffff;
 }
 
 .todo-list {

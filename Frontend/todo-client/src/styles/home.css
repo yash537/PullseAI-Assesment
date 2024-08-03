@@ -1,7 +1,7 @@
 /* src/components/LandingPage.css */
 .landing-page {
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #f9d423, #ff4e50);
+  background: #ffffff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

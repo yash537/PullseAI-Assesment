@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 import { ReactComponent as SignupSVG } from "../assest/signup.svg";
 import { signup } from "../redux/actions";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const [emailid, setEmail] = useState("");
@@ -17,7 +18,8 @@ const Signup = () => {
     e.preventDefault();
     try {
       await dispatch(signup({ emailid, password })).then(() => {
-        navigate("/signin"); // Redirect to sign-in page on success
+        navigate("/signin");
+        toast.success("signup successfully!"); // Redirect to sign-in page on success
       });
     } catch (err) {
       setError("Signup failed. Please try again."); // Handle error appropriately

@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../styles/signup.css";
-import { ReactComponent as SignupSVG } from "../assest/signup.svg";
+import { ReactComponent as SignupSVG } from "../assest/signin.svg";
 import { signin } from "../redux/actions";
+import { toast, ToastContainer } from "react-toastify";
 
 const Signin = () => {
   const [emailid, setEmail] = useState("");
@@ -18,6 +19,7 @@ const Signin = () => {
     try {
       await dispatch(signin({ emailid, password })).then(() => {
         navigate("/dashboard"); // Redirect to sign-in page on success
+        toast.success("signin successfully!");
       });
     } catch (err) {
       setError("Signin failed. Please try again."); // Handle error appropriately
@@ -26,6 +28,7 @@ const Signin = () => {
 
   return (
     <div className="signup-page">
+      <ToastContainer />
       <main className="signup-content">
         <section className="signup-section">
           <div className="signup-form-container">

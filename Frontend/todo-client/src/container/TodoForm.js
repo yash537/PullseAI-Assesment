@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addTodo, updateTodo } from "../redux/actions";
+import { addTodo, fetchTodos, updateTodo } from "../redux/actions";
 import Modal from "../components/Modal";
 import { toast } from "react-toastify"; // Import toast
 import "../styles/todoform.css"; // Ensure this path is correct
@@ -41,18 +41,20 @@ const TodoForm = ({ todo, onSave, onCancel }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (todo && todo._id) {
-      dispatch(updateTodo(formData)).then(() => {
+    try {
+      if (todo && todo._id) {
+        await dispatch(updateTodo(formData)); // Await the dispatch if it returns a promise
         toast.success("Task updated successfully!"); // Show success toast
-      });
-    } else {
-      dispatch(addTodo(formData)).then(() => {
+      } else {
+        await dispatch(addTodo(formData)); // Await the dispatch if it returns a promise
         toast.success("Task added successfully!"); // Show success toast
-      });
+      }
+      onSave(formData); // Call onSave with the formData
+    } catch (error) {
+      toast.error("An error occurred while saving the task."); // Show error toast if dispatch fails
     }
-    onSave();
   };
 
   return (
