@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const todos = useSelector((state) => state.items);
   const token = localStorage.getItem("token");
@@ -78,11 +79,16 @@ const Dashboard = () => {
     navigate("/");
   };
 
-  const sortedTodos = todos.slice().sort((a, b) => {
-    if (a.status === "Done" && b.status !== "Done") return 1;
-    if (a.status !== "Done" && b.status === "Done") return -1;
-    return 0;
-  });
+  const filteredTodos = todos
+    .filter((todo) =>
+      todo.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .slice()
+    .sort((a, b) => {
+      if (a.status === "Done" && b.status !== "Done") return 1;
+      if (a.status !== "Done" && b.status === "Done") return -1;
+      return 0;
+    });
 
   return (
     <div className="dashboard">
@@ -105,8 +111,15 @@ const Dashboard = () => {
           <button className="add-task-button" onClick={handleAddClick}>
             Add Task
           </button>
+          <input
+            type="text"
+            placeholder="Search tasks by title"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
           <ul>
-            {sortedTodos.map((todo) => (
+            {filteredTodos.map((todo) => (
               <li
                 key={todo._id}
                 onClick={() => handleTodoClick(todo)}
