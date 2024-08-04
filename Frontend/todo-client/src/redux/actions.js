@@ -76,12 +76,25 @@ export const signup = (userData) => async (dispatch) => {
   }
 };
 
-export const signin = (userData) => async (dispatch) => {
-  dispatch({ type: SIGNIN_REQUEST });
+export const signin = (credentials) => async (dispatch) => {
   try {
-    const response = await axios.post("/signin", userData);
-    dispatch({ type: SIGNIN_SUCCESS, payload: response.data });
+    dispatch({ type: SIGNIN_REQUEST });
+    const response = await axios.post("/signin", credentials);
+    const { token, user } = response.data;
+
+    localStorage.setItem("token", token);
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    dispatch({
+      type: SIGNIN_SUCCESS,
+      payload: { token, user },
+    });
   } catch (error) {
-    dispatch({ type: SIGNIN_FAIL, payload: error.message });
+    dispatch({
+      type: SIGNIN_FAIL,
+      payload: error.message,
+    });
+    throw error;
   }
 };

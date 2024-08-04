@@ -24,6 +24,7 @@ const initialState = {
   loading: false,
   error: null,
   user: null,
+  token: localStorage.getItem("token") || null,
   authLoading: false,
   authError: null,
 };
@@ -82,7 +83,12 @@ const todoReducer = (state = initialState, action) => {
     case SIGNIN_REQUEST:
       return { ...state, authLoading: true, authError: null };
     case SIGNIN_SUCCESS:
-      return { ...state, authLoading: false, user: action.payload };
+      return {
+        ...state,
+        authLoading: false,
+        user: action.payload.user,
+        token: action.payload.token,
+      };
     case SIGNIN_FAIL:
       return { ...state, authLoading: false, authError: action.payload };
 

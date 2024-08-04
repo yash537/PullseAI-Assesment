@@ -4,21 +4,27 @@ import { fetchTodos, deleteTodo } from "../redux/actions";
 import "../styles/dashboard.css";
 import { ReactComponent as BackgroundSVG } from "../assest/home1.svg";
 import TodoForm from "./TodoForm";
-import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify"; // Import toast and ToastContainer
-import "react-toastify/dist/ReactToastify.css"; // Import the CSS for Toastify
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const todos = useSelector((state) => state.items);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    dispatch(fetchTodos());
-  }, [dispatch]);
+    if (!token) {
+      navigate("/signin");
+    } else {
+      dispatch(fetchTodos());
+    }
+  }, [dispatch, navigate, token]);
 
   const handleTodoClick = (todo) => {
     setSelectedTodo(todo);
@@ -32,7 +38,7 @@ const Dashboard = () => {
 
   const handleDelete = (id) => {
     dispatch(deleteTodo(id));
-    toast.success("Task deleted successfully!"); // Show success toast
+    toast.success("Task deleted successfully!");
   };
 
   const handleAddClick = () => {
@@ -44,11 +50,11 @@ const Dashboard = () => {
   const handleSave = (savedTodo) => {
     dispatch(fetchTodos())
       .then(() => {
-        setSelectedTodo(savedTodo); // Set the saved todo as selected
+        setSelectedTodo(savedTodo);
         setShowForm(false);
       })
       .catch((error) => {
-        toast.error("Failed to fetch todos after save."); // Handle error if needed
+        toast.error("Failed to fetch todos after save.");
       });
   };
 
@@ -57,17 +63,42 @@ const Dashboard = () => {
     setShowForm(false);
   };
 
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    } else {
+      navigate("/signin");
+    }
+  };
+
+  const handleSignOut = (e) => {
+    localStorage.setItem("token", "");
+    navigate("/");
+  };
+
+  const sortedTodos = todos.slice().sort((a, b) => {
+    if (a.status === "Done" && b.status !== "Done") return 1;
+    if (a.status !== "Done" && b.status === "Done") return -1;
+    return 0;
+  });
+
   return (
     <div className="dashboard">
       <header className="header">
         <div className="logo">TodoApp</div>
         <nav className="navigation">
-          <Link to="/">Home</Link>
+          <Link to="/" onClick={handleHomeClick}>
+            Home
+          </Link>
           <Link to="/">About</Link>
-          <Link to="/signup">Sign Up</Link>
+          <Link to="/" onClick={handleSignOut}>
+            Sign Out
+          </Link>
         </nav>
       </header>
-      <ToastContainer /> {/* Add ToastContainer here */}
+      <ToastContainer />
       <div className="main-container">
         <div className="todo-list">
           <h2>Todo List</h2>
@@ -75,7 +106,7 @@ const Dashboard = () => {
             Add Task
           </button>
           <ul>
-            {todos.map((todo) => (
+            {sortedTodos.map((todo) => (
               <li
                 key={todo._id}
                 onClick={() => handleTodoClick(todo)}

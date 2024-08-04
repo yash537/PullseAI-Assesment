@@ -1,28 +1,28 @@
-// src/components/Signup.js
+// src/components/Signin.js
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 import { ReactComponent as SignupSVG } from "../assest/signin.svg";
 import { signin } from "../redux/actions";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signin = () => {
   const [emailid, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const error = useSelector((state) => state.authError);
 
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(signin({ emailid, password })).then(() => {
-        navigate("/dashboard"); // Redirect to sign-in page on success
-        toast.success("signin successfully!");
-      });
+      await dispatch(signin({ emailid, password }));
+      toast.success("Signin successfully!");
+      navigate("/dashboard"); // Redirect to dashboard on success
     } catch (err) {
-      setError("Signin failed. Please try again."); // Handle error appropriately
+      toast.error("Signin failed. Please try again."); // Show error toast
     }
   };
 
