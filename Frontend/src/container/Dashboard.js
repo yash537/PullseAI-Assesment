@@ -40,6 +40,7 @@ const Dashboard = () => {
   const handleDelete = (id) => {
     dispatch(deleteTodo(id));
     toast.success("Task deleted successfully!");
+    setSelectedTodo(null);
   };
 
   const handleAddClick = () => {
